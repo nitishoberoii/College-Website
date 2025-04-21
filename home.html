@@ -534,19 +534,60 @@
                 <div class="footer-link newsletter">
                     <h2> Enquiry</h2>
                     <p>Fill for Enquiry</p>
-                    <input type="text" name="" placeholder="E-mail">
+                    <form id="enquiryForm">
+                    <input type="email"id="enquiryEmail" name="email" placeholder="E-mail">
                     <button> Submit</button>
+                    </form>
                 </div>
             </div>
-
-
-
-
-
         </div>
     </div>
 
+
+
+     <!-- Firebase Integration -->
+     <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnn2z8-DGU0cou3HZ6_p42XVdUEFUKPFE",
+            authDomain: "loginwebsite-6be2c.firebaseapp.com",
+            projectId: "loginwebsite-6be2c",
+            storageBucket: "loginwebsite-6be2c.appspot.com",
+            messagingSenderId: "5034966248",
+            appId: "1:5034966248:web:499f112e0775242964dd5d"
+        };
+
     <!--/*footer section ends*/-->
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Enquiry form submission handler
+    document.getElementById('enquiryForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('enquiryEmail').value;
+
+        try {
+            // Add email to Firestore
+            await addDoc(collection(db, "enquiries"), {
+                email: email,
+                timestamp: Timestamp.now()
+            });
+
+            alert("Thank you for your enquiry!");
+            document.getElementById('enquiryForm').reset();
+        } catch (error) {
+            console.error("Error submitting enquiry: ", error);
+            alert("Error submitting enquiry. Please try again.");
+        }
+    });
+</script>
 
 
 </body>
